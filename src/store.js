@@ -5,7 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    products: []
+    products: [],
+    cart: []
   },
   mutations: {
     addProduct(state, product) {
@@ -16,12 +17,28 @@ export default new Vuex.Store({
       // let deleted = state.products[index]
       // alert('deleted ' +  deleted.name + ' (slug: ' + deleted.slug + ')')
       state.products.splice(index, 1);
+    },
+    addToCart(state, productToAdd) {
+      const index = state.cart.findIndex(
+        itemInCart => itemInCart.product.slug === productToAdd.product.slug
+      )
 
+      // Product not yet in cart
+      if (index === -1) {
+        // state.cart = [...state.cart, productToAdd]
+        productToAdd.quantity = 1
+        state.cart.push(productToAdd)
+      }
+      // Already exists, increment quantity
+      else {
+        state.cart[index].quantity += 1
+      }
     }
   },
   actions: {},
   getters: {
-    products: state => state.products
+    products: state => state.products,
+    cart: state => state.cart
   },
 });
 
