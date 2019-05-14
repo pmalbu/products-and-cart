@@ -1,5 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import VuexPersist from 'vuex-persist'
+
+const vuexLocalStorage = new VuexPersist({
+  key: 'ecommerce', // a unique key to store the data
+  storage: window.localStorage
+})
 
 Vue.use(Vuex);
 
@@ -19,6 +25,7 @@ export default new Vuex.Store({
       state.products.splice(index, 1);
     },
     addToCart(state, productToAdd) {
+
       const index = state.cart.findIndex(
         itemInCart => itemInCart.product.slug === productToAdd.product.slug
       )
@@ -26,12 +33,25 @@ export default new Vuex.Store({
       // Product not yet in cart
       if (index === -1) {
         // state.cart = [...state.cart, productToAdd]
-        productToAdd.quantity = 1
         state.cart.push(productToAdd)
       }
       // Already exists, increment quantity
       else {
         state.cart[index].quantity += 1
+      }
+    },
+    removeFromCart(state, productToRemove) {
+      const index = state.cart.findIndex(
+        itemInCart => itemInCart.product.slug === productToRemove.product.slug
+      )
+
+      if (index !== -1) {
+        if (state.cart[index].quantity === 1) {
+          state.cart.splice(index, 1);
+        }
+        else {
+          state.cart[index].quantity -= 1
+        }
       }
     }
   },
@@ -40,6 +60,7 @@ export default new Vuex.Store({
     products: state => state.products,
     cart: state => state.cart
   },
+  plugins: [vuexLocalStorage.plugin]
 });
 
 const slugify = str => {

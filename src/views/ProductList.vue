@@ -10,6 +10,13 @@
       <p class="description">{{ product.description }}</p>
       <p class="price">${{ product.price }}</p>
       <button style="color:red" @click.stop="deleteProduct(index)">ⓧ</button>
+      <button
+        style="color:green; background-color: green; border-radius: 75%"
+        @click.stop="addToCart(index)"
+      >
+        ➕
+      </button>
+      <button @click.stop="removeFromCart(index)">➖</button>
     </div>
   </div>
 </template>
@@ -20,6 +27,18 @@ export default {
   methods: {
     deleteProduct(index) {
       this.$store.commit("deleteProduct", index);
+    },
+    addToCart(index) {
+      this.$store.commit("addToCart", {
+        product: this.$store.getters.products[index],
+        quantity: 1
+      });
+    },
+    removeFromCart(index) {
+      this.$store.commit("removeFromCart", {
+        product: this.$store.getters.products[index],
+        quantity: 1
+      });
     }
   }
 };

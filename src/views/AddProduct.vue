@@ -33,6 +33,7 @@ export default {
         description: this.description,
         imageUrl: this.imageUrl
       });
+      this.$router.push({ name: "product-list" });
     }
   }
 };

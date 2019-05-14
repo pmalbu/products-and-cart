@@ -10,9 +10,22 @@
       <router-link to="/add-product">Add Product</router-link>
     </div>
 
+    <ShoppingCart />
+
     <router-view />
   </div>
 </template>
+
+<script>
+import ShoppingCart from "./components/ShoppingCart";
+
+export default {
+  name: "App",
+  components: {
+    ShoppingCart
+  }
+};
+</script>
 
 <style>
 #app {
